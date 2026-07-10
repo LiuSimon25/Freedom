@@ -10,19 +10,22 @@ import {
   getTopExpenseCategories,
   getYearlyTrend,
 } from "../utils/financeCalc";
+import { toLocalDateInputValue, toLocalMonthInputValue } from "../utils/dateDefaults";
 import { validateLedgerForm } from "../utils/validators";
 
 const expenseCategories = ["餐饮", "交通", "购物", "娱乐", "住房", "医疗", "学习", "人情", "其他"];
 const incomeCategories = ["工资", "奖金", "副业", "理财收入", "红包", "其他"];
 
-const selectedMonth = ref("2026-06");
-const selectedYear = ref(2026);
+const todayDate = toLocalDateInputValue();
+const todayMonth = toLocalMonthInputValue();
+const selectedMonth = ref(todayMonth);
+const selectedYear = ref(Number(todayMonth.slice(0, 4)));
 const recordType = ref("expense");
 const records = ref([]);
 const form = ref({
   amount: "",
   category: "餐饮",
-  date: "2026-06-02",
+  date: todayDate,
   note: "",
 });
 const formErrors = ref({});
@@ -69,7 +72,7 @@ function changeMonth(step) {
   const date = new Date(`${selectedMonth.value}-01T00:00:00`);
   date.setMonth(date.getMonth() + step);
   selectedMonth.value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-  form.value.date = `${selectedMonth.value}-02`;
+  form.value.date = selectedMonth.value === todayMonth ? todayDate : `${selectedMonth.value}-01`;
 }
 
 function submitRecord() {
@@ -88,7 +91,7 @@ function submitRecord() {
 
   form.value.amount = "";
   form.value.note = "";
-  form.value.date = `${selectedMonth.value}-02`;
+  form.value.date = selectedMonth.value === todayMonth ? todayDate : `${selectedMonth.value}-01`;
   formErrors.value = {};
 }
 

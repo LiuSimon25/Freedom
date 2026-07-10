@@ -10,6 +10,7 @@ import {
   getTopExpenseCategories,
   getYearlyTrend,
 } from "../utils/financeCalc";
+import { buildMoneyYAxisOptions, buildTrendChartGrid } from "../utils/chartAxis";
 import { toLocalDateInputValue, toLocalMonthInputValue } from "../utils/dateDefaults";
 import { validateLedgerForm } from "../utils/validators";
 
@@ -186,7 +187,7 @@ function renderTrendChart() {
       itemWidth: 18,
       itemHeight: 3,
     },
-    grid: { left: 42, right: 18, top: 42, bottom: 28 },
+    grid: buildTrendChartGrid(42, 28),
     xAxis: {
       type: "category",
       data: yearlyTrend.value.labels,
@@ -194,11 +195,7 @@ function renderTrendChart() {
       axisTick: { show: false },
       axisLabel: { color: "#777a88" },
     },
-    yAxis: {
-      type: "value",
-      axisLabel: { color: "#777a88", formatter: (value) => `${value / 1000}k` },
-      splitLine: { lineStyle: { color: "#1c1d22" } },
-    },
+    yAxis: buildMoneyYAxisOptions([yearlyTrend.value.income, yearlyTrend.value.expense]),
     series: [
       { name: "收入", type: "line", smooth: true, symbolSize: 5, data: yearlyTrend.value.income },
       { name: "支出", type: "line", smooth: true, symbolSize: 5, data: yearlyTrend.value.expense },

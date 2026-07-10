@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import * as echarts from "echarts";
 import { BriefcaseBusiness, HeartPulse, Plus, Shield, ShieldCheck, TriangleAlert, X } from "lucide-vue-next";
+import { buildMoneyYAxisOptions, buildTrendChartGrid } from "../utils/chartAxis";
 import { getBucketSummary, getBucketTrendFromSnapshots, getInsuranceCategoryStats, INSURANCE_CATEGORIES, MONEY_BUCKETS } from "../utils/configCalc";
 import {
   deletePolicy,
@@ -179,7 +180,7 @@ function renderTrendChart() {
       itemWidth: 20,
       itemHeight: 4,
     },
-    grid: { left: 42, right: 18, top: 42, bottom: 30 },
+    grid: buildTrendChartGrid(42, 30),
     xAxis: {
       type: "category",
       data: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -187,11 +188,7 @@ function renderTrendChart() {
       axisTick: { show: false },
       axisLabel: { color: "#777a88" },
     },
-    yAxis: {
-      type: "value",
-      axisLabel: { color: "#777a88", formatter: (value) => `${value / 1000}k` },
-      splitLine: { lineStyle: { color: "#1c1d22" } },
-    },
+    yAxis: buildMoneyYAxisOptions([bucketTrend.value.活钱, bucketTrend.value.短期, bucketTrend.value.长期]),
     series: [
       { name: "活钱", type: "line", smooth: true, symbolSize: 5, data: bucketTrend.value.活钱 },
       { name: "短期", type: "line", smooth: true, symbolSize: 5, data: bucketTrend.value.短期 },

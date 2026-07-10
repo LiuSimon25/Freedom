@@ -8,6 +8,7 @@ import {
   getAssetSummary,
   getAssetTrend,
 } from "../utils/assetCalc";
+import { buildMoneyYAxisOptions, buildTrendChartGrid } from "../utils/chartAxis";
 import {
   deleteAsset,
   getAssetSnapshots,
@@ -228,7 +229,7 @@ function renderTrendChart() {
       borderColor: "#2e3038",
       textStyle: { color: "#e2e3e9" },
     },
-    grid: { left: 42, right: 18, top: 28, bottom: 28 },
+    grid: buildTrendChartGrid(28, 28),
     xAxis: {
       type: "category",
       data: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
@@ -236,11 +237,7 @@ function renderTrendChart() {
       axisTick: { show: false },
       axisLabel: { color: "#777a88" },
     },
-    yAxis: {
-      type: "value",
-      axisLabel: { color: "#777a88", formatter: (value) => `${value / 1000}k` },
-      splitLine: { lineStyle: { color: "#1c1d22" } },
-    },
+    yAxis: buildMoneyYAxisOptions([trendValues.value]),
     series: [
       {
         name: ASSET_CATEGORY_LABELS[selectedTrendCategory.value],

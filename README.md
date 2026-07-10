@@ -24,12 +24,6 @@ Live demo:
 https://frdom.netlify.app/
 ```
 
-本地运行后访问：
-
-```bash
-http://localhost:5173/
-```
-
 ### Screenshots
 
 | 首页 | 记账页 |

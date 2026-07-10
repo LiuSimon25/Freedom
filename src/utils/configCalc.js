@@ -49,16 +49,31 @@ export function getInsuranceCategoryStats(policies) {
 }
 
 export function getBucketTrendFromSnapshots(snapshots, year) {
-  const base = {
-    活钱: Array.from({ length: 12 }, (_, index) => 48000 + index * 2500),
-    短期: Array.from({ length: 12 }, (_, index) => 31000 + index * 1600),
-    长期: Array.from({ length: 12 }, (_, index) => 16000 + index * 1200),
+  const trend = {
+    活钱: Array.from({ length: 12 }, () => 0),
+    短期: Array.from({ length: 12 }, () => 0),
+    长期: Array.from({ length: 12 }, () => 0),
   };
 
-  const sameYearSnapshots = snapshots.filter((snapshot) => snapshot.year === Number(year));
-  if (sameYearSnapshots.length === 0) {
-    return base;
-  }
+  snapshots
+    .filter((snapshot) => snapshot.year === Number(year))
+    .forEach((snapshot) => {
+      const index = Number(snapshot.month) - 1;
+      if (index < 0 || index > 11) {
+        return;
+      }
 
-  return base;
+      if (snapshot.buckets) {
+        trend.活钱[index] = round(snapshot.buckets.活钱);
+        trend.短期[index] = round(snapshot.buckets.短期);
+        trend.长期[index] = round(snapshot.buckets.长期);
+        return;
+      }
+
+      trend.活钱[index] = round(snapshot.categories?.liquid);
+      trend.短期[index] = round(snapshot.categories?.receivable);
+      trend.长期[index] = round(Number(snapshot.categories?.fixed || 0) + Number(snapshot.categories?.investment || 0));
+    });
+
+  return trend;
 }

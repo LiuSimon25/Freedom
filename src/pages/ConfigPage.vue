@@ -145,6 +145,7 @@ function handleDataCleared() {
   policies.value = [];
   policyListModalOpen.value = false;
   policyToDelete.value = null;
+  trendChart?.clear();
 }
 
 function closePolicyListModal() {
@@ -157,6 +158,7 @@ function openPolicyListModal() {
 
 function renderTrendChart() {
   if (!trendChartRef.value || !hasBucketTrendData.value) {
+    trendChart?.clear();
     return;
   }
 

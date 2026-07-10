@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import {
   getBucketSummary,
+  getBucketTrendFromSnapshots,
   getInsuranceCategoryStats,
 } from "../src/utils/configCalc.js";
 
@@ -35,4 +36,10 @@ assert.deepEqual(getInsuranceCategoryStats(policies), {
   意外: 1,
   寿险: 1,
   重疾: 3,
+});
+
+assert.deepEqual(getBucketTrendFromSnapshots([], 2026), {
+  活钱: Array.from({ length: 12 }, () => 0),
+  短期: Array.from({ length: 12 }, () => 0),
+  长期: Array.from({ length: 12 }, () => 0),
 });

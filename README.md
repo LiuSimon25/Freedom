@@ -18,6 +18,12 @@ Freedom 希望用一个简单、直观的网页工具，帮助用户看清自己
 
 ## Preview
 
+Live demo:
+
+```bash
+https://frdom.netlify.app/
+```
+
 本地运行后访问：
 
 ```bash

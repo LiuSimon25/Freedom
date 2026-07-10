@@ -3,7 +3,7 @@ import { computed, nextTick, onMounted, ref, watch } from "vue";
 import * as echarts from "echarts";
 import { BriefcaseBusiness, HeartPulse, Plus, Shield, ShieldCheck, TriangleAlert, X } from "lucide-vue-next";
 import { buildMoneyYAxisOptions, buildTrendChartGrid } from "../utils/chartAxis";
-import { getBucketSummary, getBucketTrendFromSnapshots, getInsuranceCategoryStats, INSURANCE_CATEGORIES, MONEY_BUCKETS } from "../utils/configCalc";
+import { getBucketSummary, getBucketTrendWithCurrentSummary, getInsuranceCategoryStats, INSURANCE_CATEGORIES, MONEY_BUCKETS } from "../utils/configCalc";
 import {
   deletePolicy,
   getAssetSnapshots,
@@ -45,7 +45,7 @@ const bucketDraft = ref([]);
 
 const bucketSummary = computed(() => getBucketSummary(assets.value));
 const insuranceStats = computed(() => getInsuranceCategoryStats(policies.value));
-const bucketTrend = computed(() => getBucketTrendFromSnapshots(snapshots.value, selectedYear.value));
+const bucketTrend = computed(() => getBucketTrendWithCurrentSummary(snapshots.value, selectedYear.value, bucketSummary.value));
 const policyPreview = computed(() => policies.value.slice(0, 4));
 const hasBucketAssets = computed(() => assets.value.some((asset) => asset.category !== "负债"));
 const hasBucketTrendData = computed(() => MONEY_BUCKETS.some((bucket) => bucketTrend.value[bucket].some((value) => value > 0)));

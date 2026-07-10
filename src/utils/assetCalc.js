@@ -52,9 +52,27 @@ export function getAssetSummary(assets) {
   };
 }
 
+export function getAssetBucketTotals(assets) {
+  const buckets = {
+    活钱: 0,
+    短期: 0,
+    长期: 0,
+  };
+
+  assets.forEach((asset) => {
+    if (asset.category === "负债" || !Object.prototype.hasOwnProperty.call(buckets, asset.moneyBucket)) {
+      return;
+    }
+    buckets[asset.moneyBucket] = roundMoney(buckets[asset.moneyBucket] + Number(asset.amount || 0));
+  });
+
+  return buckets;
+}
+
 export function createAssetSnapshot(assets, date = new Date()) {
   const summary = getAssetSummary(assets);
   const categories = getAssetCategoryTotals(assets);
+  const buckets = getAssetBucketTotals(assets);
   return {
     id: typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : `${date.getTime()}`,
     date: date.toISOString().slice(0, 10),
@@ -64,6 +82,7 @@ export function createAssetSnapshot(assets, date = new Date()) {
     totalLiabilities: summary.totalLiabilities,
     netAssets: summary.netAssets,
     categories,
+    buckets,
     createdAt: date.toISOString(),
   };
 }

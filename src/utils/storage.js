@@ -1,4 +1,5 @@
 import { buildExportPayload, normalizeImportPayload } from "./dataPortability";
+import { createAssetSnapshot } from "./assetCalc";
 
 const LEDGER_KEY = "freedom_ledger_records";
 const ASSET_KEY = "freedom_assets";
@@ -196,33 +197,7 @@ function ensureAssetSnapshots() {
 }
 
 function createSnapshot(assets) {
-  const now = new Date();
-  const totals = assets.reduce(
-    (result, asset) => {
-      const amount = Number(asset.amount || 0);
-      if (asset.category === "流动资金") result.liquid += amount;
-      if (asset.category === "固定资产") result.fixed += amount;
-      if (asset.category === "投资理财") result.investment += amount;
-      if (asset.category === "应收款") result.receivable += amount;
-      if (asset.category === "负债") result.liability += amount;
-      return result;
-    },
-    { liquid: 0, fixed: 0, investment: 0, receivable: 0, liability: 0 },
-  );
-  const totalAssets = totals.liquid + totals.fixed + totals.investment + totals.receivable;
-  const totalLiabilities = totals.liability;
-
-  return {
-    id: crypto.randomUUID(),
-    date: now.toISOString().slice(0, 10),
-    year: now.getFullYear(),
-    month: now.getMonth() + 1,
-    totalAssets,
-    totalLiabilities,
-    netAssets: totalAssets - totalLiabilities,
-    categories: totals,
-    createdAt: now.toISOString(),
-  };
+  return createAssetSnapshot(assets);
 }
 
 function saveAssetsWithSnapshot(assets) {

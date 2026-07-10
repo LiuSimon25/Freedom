@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   getBucketSummary,
   getBucketTrendFromSnapshots,
+  getBucketTrendWithCurrentSummary,
   getInsuranceCategoryStats,
 } from "../src/utils/configCalc.js";
 
@@ -43,3 +44,23 @@ assert.deepEqual(getBucketTrendFromSnapshots([], 2026), {
   短期: Array.from({ length: 12 }, () => 0),
   长期: Array.from({ length: 12 }, () => 0),
 });
+
+const staleTrend = getBucketTrendWithCurrentSummary(
+  [
+    {
+      year: 2026,
+      month: 7,
+      categories: { liquid: 0, fixed: 0, investment: 14455.49, receivable: 0, liability: 0 },
+    },
+  ],
+  2026,
+  {
+    活钱: { amount: 0 },
+    短期: { amount: 14455.49 },
+    长期: { amount: 0 },
+  },
+  new Date("2026-07-10T10:00:00.000Z"),
+);
+
+assert.equal(staleTrend.短期[6], 14455.49);
+assert.equal(staleTrend.长期[6], 0);

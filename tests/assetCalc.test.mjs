@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import {
+  createAssetSnapshot,
   getAssetCategoryTotals,
   getAssetSummary,
   getAssetTrend,
@@ -30,6 +31,19 @@ assert.deepEqual(getAssetSummary(assets), {
   totalLiabilities: 40000,
   netAssets: 110000,
   liabilityRatio: 26.67,
+});
+
+const configuredAssets = [
+  { name: "现金账户", amount: 20000, category: "流动资金", moneyBucket: "活钱" },
+  { name: "短债基金", amount: 14455.49, category: "投资理财", moneyBucket: "短期" },
+  { name: "指数基金", amount: 30000, category: "投资理财", moneyBucket: "不纳入配置" },
+  { name: "房贷", amount: 5000, category: "负债" },
+];
+
+assert.deepEqual(createAssetSnapshot(configuredAssets, new Date("2026-07-10T10:00:00.000Z")).buckets, {
+  活钱: 20000,
+  短期: 14455.49,
+  长期: 0,
 });
 
 const snapshots = [

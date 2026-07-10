@@ -77,3 +77,17 @@ export function getBucketTrendFromSnapshots(snapshots, year) {
 
   return trend;
 }
+
+export function getBucketTrendWithCurrentSummary(snapshots, year, bucketSummary, date = new Date()) {
+  const trend = getBucketTrendFromSnapshots(snapshots, year);
+
+  if (date.getFullYear() !== Number(year)) {
+    return trend;
+  }
+
+  const index = date.getMonth();
+  trend.活钱[index] = round(bucketSummary?.活钱?.amount);
+  trend.短期[index] = round(bucketSummary?.短期?.amount);
+  trend.长期[index] = round(bucketSummary?.长期?.amount);
+  return trend;
+}

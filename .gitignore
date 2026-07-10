@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.vite/
+
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+
+# Local logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime and cache
+.cache/
+.temp/
+.tmp/
+tmp/
+temp/
+
+# Editor and OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local backup and exported private data
+*.local
+*.backup
+*.bak
+*.tmp
+*.private.*
+freedom-export*.json
+freedom-backup*.json
+backup*.json
+export*.json
+*屏幕截图*.png
+
+# Project working drafts and temporary review files
+fix/
+record/
+preview/
+picture/
+docs/superpowers/
+CODEX_FINAL_TEST.md
+question.md
+PROJECT.md
+TODO.md
+DESIGN (9).md
+
+# Test and coverage output
+coverage/
+.nyc_output/
+
+# Netlify local files
+.netlify/
